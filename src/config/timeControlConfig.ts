@@ -13,7 +13,9 @@ export interface AppConfig {
         exp:string|number
     },
     timeWindowMs:number,
-    requestLimit:number
+    requestLimit:number,
+    minRestHours:number,
+    maxShiftHours:number
 }
 dotenv.config();
 

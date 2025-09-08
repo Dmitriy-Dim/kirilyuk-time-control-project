@@ -1,15 +1,21 @@
 {
-  "port":3555,
-  "skipRoutes" : [
+  "port": 3555,
+  "skipRoutes": [
     "POST/accounts",
     "POST/accounts/login"
   ],
   "pathRoles": {
-    "GET/accounts/reader_id" : ["user", "admin","premium"],
-    "PATCH/accounts/password" : ["user", "premium"],
-    "DELETE/accounts" : ["super"],
-    "PATCH/accounts" : ["user","admin", "premium"],
-    "PUT/accounts/roles" : ["super"]
+    "GET/accounts/reader_id": ["crew", "manager", "hr", "supervisor"],
+    "PATCH/accounts/password": ["crew", "manager", "hr"],
+    "DELETE/accounts": ["supervisor"],
+    "PATCH/accounts": ["crew", "manager", "hr"],
+    "PUT/accounts/roles": ["supervisor"],
+    "POST/shifts/start": ["crew", "manager", "hr"],
+    "POST/shifts/finish": ["crew", "manager", "hr"],
+    "POST/shifts/break": ["crew", "manager", "hr"],
+    "PATCH/shifts/correct": ["manager", "supervisor"],
+    "GET/shifts/current": ["manager", "hr", "supervisor"],
+    "GET/shifts/employee": ["crew", "manager", "hr", "supervisor"]
   },
   "checkIdRoutes": [
     "GET/accounts/reader_id",
@@ -17,5 +23,7 @@
     "PATCH/accounts"
   ],
   "timeWindowMs": 60000,
-  "requestLimit": 3
+  "requestLimit": 3,
+  "minRestHours": 8,
+  "maxShiftHours": 12
 }
