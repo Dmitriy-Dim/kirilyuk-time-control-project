@@ -60,8 +60,337 @@
 				{
 					"name": "FireEmployee",
 					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3555/accounts?id=123456789",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"accounts"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "123456789"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetEmployeeById",
+					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3555/accounts/employee?id=123456789",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"accounts",
+								"employee"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "123456789"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateEmployee",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Остап\",\r\n    \"lastName\":\"Бендер\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3555/accounts?id=123456789",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"accounts"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "123456789"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Shifts",
+			"item": [
+				{
+					"name": "StartShift",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"table_num\": \"your-table-number-here\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3555/shifts/start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FinishShift",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"table_num\": \"your-table-number-here\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3555/shifts/finish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"finish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TakeBreak",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"table_num\": \"your-table-number-here\",\r\n    \"duration\": 15\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3555/shifts/break",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"break"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TakeBreak30min",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"table_num\": \"your-table-number-here\",\r\n    \"duration\": 30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3555/shifts/break",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"break"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CorrectShift",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"table_num_crew\": \"crew-table-number\",\r\n    \"table_num_mng\": \"manager-table-number\",\r\n    \"start\": 1725788400000,\r\n    \"finish\": 1725817200000,\r\n    \"date\": \"2025-09-08\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3555/shifts/correct",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"correct"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCurrentShiftStaff",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3555/shifts/current",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetActiveShiftByEmployee",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3555/shifts/employee?table_num=your-table-number-here",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"employee"
+							],
+							"query": [
+								{
+									"key": "table_num",
+									"value": "your-table-number-here"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CanStartShift",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3555/shifts/can-start?table_num=your-table-number-here",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3555",
+							"path": [
+								"shifts",
+								"can-start"
+							],
+							"query": [
+								{
+									"key": "table_num",
+									"value": "your-table-number-here"
+								}
+							]
+						}
 					},
 					"response": []
 				}
