@@ -13,7 +13,7 @@ export interface AppConfig {
         exp:string|number
     },
     timeWindowMs:number,
-    requestLimit:number,
+    logLevel:string,
     minRestHours:number,
     maxShiftHours:number
 }

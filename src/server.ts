@@ -5,13 +5,18 @@ import * as fs from "node:fs";
 import morgan from "morgan";
 import {accountRouter} from "./routes/accountRouter.js";
 import {shiftRouter} from "./routes/shiftRouter.js";
+import {logError, logInfo} from "./logger/winston.js";
 
 
 export const launchServer = () => {
 
     const app = express();
     app.listen(configuration.port, () => {
-        console.log(`Server runs at http://localhost:${configuration.port}`)
+        logInfo(`Server started successfully`, {
+            port: configuration.port,
+            environment: process.env.NODE_ENV || 'development',
+            logLevel: configuration.logLevel
+        });
         const logStream = fs.createWriteStream('access.log', {flags:'a'});
        //==============SecurityMiddleware==========
 
@@ -27,5 +32,17 @@ export const launchServer = () => {
 
         //===============ErrorHandler==============
         app.use(errorHandler)
+
+        process.on('uncaughtException', (error) => {
+            logError('Uncaught Exception - Server shutting down', error);
+            process.exit(1);
+        });
+
+        process.on('unhandledRejection', (reason, promise) => {
+            logError('Unhandled Rejection - Server shutting down', reason, {
+                promise: promise.toString()
+            });
+            process.exit(1);
+        });
     })
 }

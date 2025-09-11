@@ -23,7 +23,7 @@
     "PATCH/accounts"
   ],
   "timeWindowMs": 60000,
-  "requestLimit": 3,
+  "logLevel": "info",
   "minRestHours": 8,
   "maxShiftHours": 12
 }
