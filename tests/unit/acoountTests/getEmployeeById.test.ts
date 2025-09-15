@@ -1,7 +1,6 @@
 import {accountServiceMongo} from "../../../src/services/AccountServiceMongoImpl.ts";
 import {EmployeeModel} from "../../../src/model/EmployeeMongoModels.ts";
 
-
 jest.mock("../../../src/model/EmployeeMongoModels.ts");
 
 describe("AccountServiceMongoImpl.getEmployeeById", () => {

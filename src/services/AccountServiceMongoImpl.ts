@@ -3,11 +3,15 @@ import {Employee, EmployeeDto, SavedFiredEmployee, UpdateEmployeeDto} from "../m
 import {EmployeeModel, FiredEmployeeModel} from "../model/EmployeeMongoModels.js";
 import {HttpError} from "../errorHandler/HttpError.js";
 import {checkFiredEmployees, checkRole, convertEmployeeToFiredEmployee} from "../utils/tools.js";
+ import bcrypt from "bcrypt";
 
 class AccountServiceMongoImpl implements AccountService {
 
-    changePassword(empId: string, newPassword: string): Promise<void> {
-        throw "Not Implemented yet";
+    async changePassword(empId: string, newPassword: string): Promise<void> {
+        const updated = await EmployeeModel.findByIdAndUpdate(empId,
+            {$set: {hash: bcrypt.hashSync(newPassword, 10)}},
+            {new: true});
+        if(!updated) throw  new HttpError(404, `Employee with id ${empId} not found`);
     }
 
     async fireEmployee(empId: string): Promise<SavedFiredEmployee> {
@@ -51,8 +55,12 @@ class AccountServiceMongoImpl implements AccountService {
 
     }
 
-    updateEmployee(empId: string, employee: UpdateEmployeeDto): Promise<Employee> {
-        throw "Not Implemented yet";
+    async updateEmployee(empId: string, employee: UpdateEmployeeDto): Promise<Employee> {
+        const updated = await EmployeeModel.findByIdAndUpdate(empId, {
+            $set: {firstName: employee.firstName, lastName: employee.lastName}
+        }, {new: true}).exec();
+        if (!updated) throw new HttpError(404, "Employee updating failed!");
+        return updated as Employee
     }
 
 }
