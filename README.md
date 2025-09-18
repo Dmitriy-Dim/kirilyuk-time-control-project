@@ -45,10 +45,10 @@ npm install
 ### 3. Настройка окружения
 Создайте файл `.env`:
 ```env
-PORT=3555
-MONGODB_URI=mongodb://localhost:27017/time-control
-MIN_REST_HOURS=8
-MAX_SHIFT_HOURS=12
+OWNER=100000000
+OWNER_PASS=123456789.com
+MONGO_URI=mongodb+srv://
+JWT_SECRET=super-secret-key-for-jwt-token
 ```
 
 ### 4. Запуск приложения
