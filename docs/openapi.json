@@ -1,0 +1,952 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Time Control Api",
+    "description": "Time Control Api for business - Employee management and shift tracking system",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3555",
+      "description": "Dev local server"
+    }
+  ],
+  "paths": {
+    "/accounts": {
+      "post": {
+        "tags": ["Accounts"],
+        "summary": "Hire new employee",
+        "description": "Creates a new employee account in the system",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Employee hired successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Get all employees",
+        "description": "Retrieves all employees from the system",
+        "responses": {
+          "200": {
+            "description": "List of all employees",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedFiredEmployee"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Accounts"],
+        "summary": "Update employee",
+        "description": "Updates employee information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmployeeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Employee updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Accounts"],
+        "summary": "Fire employee",
+        "description": "Removes employee from active roster and adds to fired employees collection",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee fired successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedFiredEmployee"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/accounts/employee": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Get employee by ID",
+        "description": "Retrieves specific employee information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/accounts/password": {
+      "patch": {
+        "tags": ["Accounts"],
+        "summary": "Update employee password",
+        "description": "Changes employee password",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/accounts/set_role": {
+      "patch": {
+        "tags": ["Accounts"],
+        "summary": "Set employee role",
+        "description": "Updates employee role/permissions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Role updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/shifts/start": {
+      "post": {
+        "tags": ["Shifts"],
+        "summary": "Start shift",
+        "description": "Begins a new work shift for an employee",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShiftStartDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Shift started successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftTimeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          }
+        }
+      }
+    },
+    "/shifts/finish": {
+      "post": {
+        "tags": ["Shifts"],
+        "summary": "Finish shift",
+        "description": "Ends the current work shift for an employee",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShiftFinishDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shift finished successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftTimeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/shifts/break": {
+      "post": {
+        "tags": ["Shifts"],
+        "summary": "Take break",
+        "description": "Registers a break during the current shift",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BreakDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Break registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/shifts/correct": {
+      "patch": {
+        "tags": ["Shifts"],
+        "summary": "Correct shift",
+        "description": "Allows managers to correct shift times (manager permissions required)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShiftCorrectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shift corrected successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/shifts/current": {
+      "get": {
+        "tags": ["Shifts"],
+        "summary": "Get current shift staff",
+        "description": "Retrieves all employees currently on shift",
+        "responses": {
+          "200": {
+            "description": "Current shift staff retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CurrentCrewShift"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shifts/employee": {
+      "get": {
+        "tags": ["Shifts"],
+        "summary": "Get active shift by employee",
+        "description": "Retrieves current active shift for specific employee",
+        "parameters": [
+          {
+            "name": "table_num",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee table number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Active shift found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrewShift"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "description": "No active shift found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shifts/can-start": {
+      "get": {
+        "tags": ["Shifts"],
+        "summary": "Check if employee can start shift",
+        "description": "Verifies if employee is eligible to start a new shift based on rest time requirements",
+        "parameters": [
+          {
+            "name": "table_num",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Employee table number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shift eligibility check completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CanStartShiftResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EmployeeDto": {
+        "type": "object",
+        "required": ["firstName", "lastName", "password", "id"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Employee first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Employee last name",
+            "example": "Snow"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "pattern": "^[a-zA-Z0-9]+$",
+            "description": "Employee password (alphanumeric, min 8 characters)",
+            "example": "SecurePass123"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 9,
+            "maxLength": 9,
+            "description": "Employee ID (exactly 9 characters)",
+            "example": "123456789"
+          }
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Employee ID",
+            "example": "123456789"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Employee first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Employee last name",
+            "example": "Snow"
+          },
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number (UUID)",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "hash": {
+            "type": "string",
+            "description": "Hashed password",
+            "example": "$2b$10$eImiTXuWVxfM37uY4JANjOxnzVwk.MgdHRwAZ4I2Bt.IW8xk.2Wy"
+          },
+          "roles": {
+            "$ref": "#/components/schemas/Role"
+          }
+        }
+      },
+      "UpdateEmployeeDto": {
+        "type": "object",
+        "required": ["firstName", "lastName"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Updated first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Updated last name",
+            "example": "Smith"
+          }
+        }
+      },
+      "SavedFiredEmployee": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Employee ID",
+            "example": "123456789"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Employee first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Employee last name",
+            "example": "Snow"
+          },
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "fireDate": {
+            "type": "string",
+            "description": "Date when employee was fired",
+            "example": "Thu Sep 18 2025"
+          }
+        }
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "required": ["id", "newPassword"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 9,
+            "maxLength": 9,
+            "description": "Employee ID",
+            "example": "123456789"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8,
+            "pattern": "^[a-zA-Z0-9]+$",
+            "description": "New password (alphanumeric, min 8 characters)",
+            "example": "NewSecurePass456"
+          }
+        }
+      },
+      "SetRoleDto": {
+        "type": "object",
+        "required": ["role"],
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/Role",
+            "example": "manager"
+          }
+        }
+      },
+      "Role": {
+        "type": "string",
+        "enum": ["crew", "manager", "hr", "supervisor"],
+        "description": "Employee role in the system"
+      },
+      "ShiftStartDto": {
+        "type": "object",
+        "required": ["table_num"],
+        "properties": {
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          }
+        }
+      },
+      "ShiftFinishDto": {
+        "type": "object",
+        "required": ["table_num"],
+        "properties": {
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          }
+        }
+      },
+      "BreakDto": {
+        "type": "object",
+        "required": ["table_num", "duration"],
+        "properties": {
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "duration": {
+            "type": "number",
+            "enum": [15, 30],
+            "description": "Break duration in minutes (15 or 30)",
+            "example": 15
+          }
+        }
+      },
+      "ShiftCorrectionDto": {
+        "type": "object",
+        "required": ["table_num_crew", "table_num_mng", "start", "finish", "date"],
+        "properties": {
+          "table_num_crew": {
+            "type": "string",
+            "description": "Employee table number whose shift is being corrected",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "table_num_mng": {
+            "type": "string",
+            "description": "Manager table number performing the correction",
+            "example": "a29bd5c7-92ff-4b15-8654-1a7b9c2e4f80"
+          },
+          "start": {
+            "type": "number",
+            "description": "Corrected start time (timestamp)",
+            "example": 1726644000000
+          },
+          "finish": {
+            "type": "number",
+            "description": "Corrected finish time (timestamp)",
+            "example": 1726672800000
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "Date of the shift being corrected (YYYY-MM-DD)",
+            "example": "2025-09-18"
+          }
+        }
+      },
+      "Break": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "number",
+            "description": "Break start time (timestamp)",
+            "example": 1726650000000
+          },
+          "end": {
+            "type": "number",
+            "description": "Break end time (timestamp)",
+            "example": 1726650900000
+          },
+          "duration": {
+            "type": "number",
+            "enum": [15, 30],
+            "description": "Break duration in minutes",
+            "example": 15
+          }
+        }
+      },
+      "CrewShift": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Shift document ID",
+            "example": "66e8a5b2c3d4e5f678901234"
+          },
+          "shift_id": {
+            "type": "string",
+            "description": "Unique shift identifier",
+            "example": "18092501"
+          },
+          "startShift": {
+            "type": "number",
+            "description": "Shift start time (timestamp)",
+            "example": 1726644000000
+          },
+          "finishShift": {
+            "type": "number",
+            "nullable": true,
+            "description": "Shift finish time (timestamp), null if active",
+            "example": null
+          },
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "shiftDuration": {
+            "type": "number",
+            "description": "Total shift duration in minutes",
+            "example": 480
+          },
+          "breaks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Break"
+            },
+            "description": "List of breaks taken during shift",
+            "example": [
+              {
+                "start": 1726650000000,
+                "end": 1726650900000,
+                "duration": 15
+              }
+            ]
+          },
+          "correct": {
+            "type": "string",
+            "nullable": true,
+            "description": "Manager table number who made corrections, null if no corrections",
+            "example": null
+          },
+          "monthHours": {
+            "type": "number",
+            "description": "Total hours worked this month",
+            "example": 168
+          }
+        }
+      },
+      "CurrentCrewShift": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CrewShift"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["active", "finished"],
+                "description": "Current shift status"
+              },
+              "employeeInfo": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "description": "Employee first name"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "description": "Employee last name"
+                  }
+                },
+                "description": "Employee information"
+              }
+            }
+          }
+        ]
+      },
+      "ShiftTimeResponse": {
+        "type": "object",
+        "properties": {
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "time": {
+            "type": "number",
+            "description": "Timestamp of the action",
+            "example": 1726644000000
+          }
+        }
+      },
+      "CanStartShiftResponse": {
+        "type": "object",
+        "properties": {
+          "table_num": {
+            "type": "string",
+            "description": "Employee table number",
+            "example": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          },
+          "canStart": {
+            "type": "boolean",
+            "description": "Whether employee can start a new shift",
+            "example": true
+          }
+        }
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Break 15 minutes registered for employee f47ac10b-58cc-4372-a567-0e02b2c3d479"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Employee with id 123456789 not found"
+          }
+        }
+      }
+    },
+    "responses": {
+      "ValidationError": {
+        "description": "Validation error in request data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "ConflictError": {
+        "description": "Conflict with current state",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Accounts",
+      "description": "Employee account management operations"
+    },
+    {
+      "name": "Shifts",
+      "description": "Shift tracking and management operations"
+    }
+  ]
+}
